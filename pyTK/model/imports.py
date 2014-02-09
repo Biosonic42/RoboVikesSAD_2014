@@ -78,9 +78,10 @@ def parse_data(info):
                 data.append(int(new))
             except:
                 break
+                
             new = ""
             i += 1
-            if i >= 27: break
+            if i >= 23: break
     return data
 
 def parse_pitData(info):

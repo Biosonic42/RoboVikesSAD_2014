@@ -13,73 +13,61 @@ class _TeamInfo(object):
 
     def __init__(self):
         self.matches = []           # list holding the matches the team was in
-        self.hangLevel = []         # list holding the level of hang for each match
-        self.hangSuccess = []       # list holding the success of hang for each match
-        self.timesHanged = 0        # the number of matches for which the team hanged successfully
-        self.attemptedHang = 0      # the number of matches for which the team attempted to hang
-        self.supportsBot = []       # list holding the state of whether this robot supported another or not (by match)
-        self.scoredOnPyr = []       # list holding the state of whether this robot scored while hanging from the pyramid or not (by match)
         self.numOff = 0             # the number of matches for which the team played offensively
         self.numDef = 0             # the number of matches for which the team played defensively
         self.numAst = 0             # the number of matches for which the team played assistively
-
-        self.hadAuto = 0            # the number of matches for which the team had an autonomous mode that did something
-        self.startedInAuto = 0      # the number of matches for which the team started completely within the autonomous zone
-        self.otherAutoStrat = 0     # the number of matches for which the team had another strategy (not offensive) in autonomous mode
-        self.autoDiscsScored = []   # list holding the number of discs scored in autonomous (by match)
-        self.autoDiscsPU = []       # list holding the number of discs picked up in autonomous (by match)
-        self.autoTopScored = []     # list holding the number of discs scored in the top goal in autonomous (by match)
-        self.autoMidScored = []     # list holding the number of discs scored in the mid goal in autonomous (by match)
-        self.autoLowScored = []     # list holding the number of discs scored in the low goal in autonomous (by match)
-        self.scoredAuto = 0         # the number of matches for which the team scored in autonomous mode
-
-        self.hadTele = 0            # the number of matches for which the robot scored in tele-op mode
-        self.disabledState = []     # list holding the number of times this robot was disabled per match
-        self.disabled = 0           # the number of matches this robot was disabled in
-        self.disabledCount = 0      # the total number of time this robot was disabled
-        self.teleFloorDiscsPU = []  # list holding the number of discs picked up from the floor in tele-op (by match)
-        self.teleStationDiscsPU = []# list holding the number of discs loaded from the station in tele-op (by match)
-        self.discsPU = []           # list holding the number of discs picked up (floor and station) in tele-op (by match)
-        self.teleDiscsScored = []   # list holding the number of discs scored in tele-op (by match)
-        self.telePyrScored = []     # list holding the number of discs scored in the pyramid in tele-op (by match)
-        self.teleTopScored = []     # list holding the number of discs scored in the top in tele-op (by match)
-        self.teleMidScored = []     # list holding the number of discs scored in the mid in tele-op (by match)
-        self.teleLowScored = []     # list holding the number of discs scored in the low in tele-op (by match)
         
-        self.RegFouls = []          # list holding the number of regular fouls for each match
-        self.TechFouls = []         # list holding the number of technical fouls for each match
-        self.hadRegFoul = 0         # the number of matches for which a team incurred a regular foul
-        self.hadTechFoul = 0        # the number of matches for which a team incurred a technical foul
-        self.hadYellow = 0          # the number of matches for which a team incurred a yellow card
-        self.hadRed = 0             # the number of matches for which a team incurred a red card
+        self.autoHadAuto = 0        # the number of matches for which the team had an autonomous mode that did something
+        self.autoMobilityBonus = 0  # the number of matches for which the team obtained the mobility bonus
+        self.autoGoalieZone = 0     # the number of matches for which the team started in the goalie zone
+        self.autoHighScored = []    # list holding the number of scores in the high goal in autonomous (by match)
+        self.autoLowScored = []     # list holding the number of scores in the low goal in autonomous (by match)
+        self.autoHotScored = []     # list holding the number of scores in a hot goal in autonomous (by match)
+        self.autoScoredAuto = 0     # the number of matches for which the team scored in autonomous mode
+
+        self.teleHadTele = 0        # the number of matches for which the robot scored in tele-op mode
+        self.teleHighScored = []    # list holding the number of scores in the high goal in tele-op (by match)
+        self.teleHighAttempted = [] # list holding the number of attempted scores in the high goal in tele-op (by match)
+        self.teleLowScored = []     # list holding the number of scores in the high goal in tele-op (by match)
+        self.teleLowAttempted = []  # list holding the number of attempted scores in the high goal in tele-op (by match)
+        self.teleTrussScored = []   # list holding the number of successful truss scores in tele-op (by match)
+        self.teleCatchScored = []   # list holding the number of successful catch scores in tele-op (by match)
+        self.teleAssistScored = []  # list holding the number of successful assist scores in tele-op (by match)
+        self.teleScoredTele = 0     # the number of matches for which the team scored (in a goal) in tele-op mode
+        
+        self.postRegFouls = []      # list holding the number of regular fouls for each match
+        self.postTechFouls = []     # list holding the number of technical fouls for each match
+        self.postHadRegFoul = 0     # the number of matches for which a team incurred a regular foul
+        self.postHadTechFoul = 0    # the number of matches for which a team incurred a technical foul
+        self.postDisabled = 0       # the number of matches in which a team was disabled
+        self.postBroken = 0         # the number of matches in which a team broke down
+        self.postHadYellow = 0      # the number of matches for which a team incurred a yellow card
+        self.postHadRed = 0         # the number of matches for which a team incurred a red card
 
     def get_more_info(self):
-        self.timesHanged = float(sum(self.hangSuccess))
-        for var in self.hangSuccess:
-            if var == 0:
-                self.attemptedHang += 1     
-        self.hangsSucctoAtt = self.timesHanged/self.attemptedHang \
-                                if self.attemptedHang else 0
-        self.totalSupportsBot = float(sum(self.supportsBot))
-        self.totalScoredOnPyr = float(sum(self.scoredOnPyr))
-        self.discsPUtoScored = sum(self.discsPU)/sum(self.teleDiscsScored) \
-                                if sum(self.teleDiscsScored)>0 else 0
+        self.autoHotAccuracy = sum(self.autoHotScored)/(sum(self.autoHighScored)+sum(self.autoLowScored)) \
+                                if (sum(self.autoHighScored)+sum(self.autoLowScored))>0 else 0
+        self.teleHighAccuracy = sum(self.teleHighScored)/sum(self.teleHighAttempted) \
+                                 if sum(self.teleHighAttempted)>0 else 0
+        self.teleLowAccuracy = sum(self.teleLowScored)/sum(self.teleLowAttempted) \
+                                if sum(self.teleLowAttempted)>0 else 0
+        self.totalTrussScores = sum(self.teleTrussScored)
+        self.totalCatchScores = sum(self.teleCatchScored)
+        self.totalAssistScores = sum(self.teleAssistScored)
+        
     def get_final_info(self):
-        self.avgAutoDiscsScored = sum(self.autoDiscsScored)/len(self.autoDiscsScored) if len(self.autoDiscsScored) else 0
-        self.avgAutoDiscsPU = sum(self.autoDiscsPU)/len(self.autoDiscsPU) if len(self.autoDiscsPU) else 0
-        self.avgAutoTopScored = sum(self.autoTopScored)/self.hadAuto if self.hadAuto else 0
-        self.avgAutoMidScored = sum(self.autoMidScored)/self.hadAuto if self.hadAuto else 0
-        self.avgAutoLowScored = sum(self.autoLowScored)/self.hadAuto if self.hadAuto else 0
-        self.avgDiscsPU = sum(self.discsPU)/len(self.discsPU) if len(self.discsPU) else 0
-        self.avgFloorDiscsPU = sum(self.teleFloorDiscsPU)/len(self.teleFloorDiscsPU) if len(self.teleFloorDiscsPU) else 0
-        self.avgStationDiscsPU = sum(self.teleStationDiscsPU)/len(self.teleStationDiscsPU) if len(self.teleStationDiscsPU) else 0
-        self.avgDiscsScored = sum(self.teleDiscsScored)/len(self.teleDiscsScored) if len(self.teleDiscsScored)>0 else 0
-        self.avgTelePyrScored = sum(self.telePyrScored)/self.hadTele if self.hadTele else 0
-        self.avgTeleTopScored = sum(self.teleTopScored)/self.hadTele if self.hadTele else 0
-        self.avgTeleMidScored = sum(self.teleMidScored)/self.hadTele if self.hadTele else 0
-        self.avgTeleLowScored = sum(self.teleLowScored)/self.hadTele if self.hadTele else 0
-        self.avgRegFoul = sum(self.RegFouls)/self.hadRegFoul if self.hadRegFoul else 0
-        self.avgTechFoul = sum(self.TechFouls)/self.hadTechFoul if self.hadTechFoul else 0
+        self.avgAutoHighScored = sum(self.autoHighScored)/len(self.autoHighScored) if len(self.autoHighScored) else 0
+        self.avgAutoLowScored = sum(self.autoLowScored)/len(self.autoLowScored) if len(self.autoLowScored) else 0
+        self.avgAutoHotScored = sum(self.autoHotScored)/len(self.autoHotScored) if len(self.autoHotScored) else 0
+        self.avgTeleHighScored = sum(self.teleHighScored)/len(self.teleHighScored) if len(self.teleHighScored) else 0
+        self.avgTeleHighAttempted = sum(self.teleHighAttempted)/len(self.teleHighAttempted) if len(self.teleHighAttempted) else 0
+        self.avgTeleLowScored = sum(self.teleLowScored)/len(self.teleLowScored) if len(self.teleLowScored) else 0
+        self.avgTeleLowAttempted = sum(self.teleLowAttempted)/len(self.teleLowAttempted) if len(self.teleLowAttempted) else 0
+        self.avgTeleTrussScored = sum(self.teleTrussScored)/len(self.teleTrussScored) if len(self.teleTrussScored) else 0
+        self.avgTeleCatchScored = sum(self.teleCatchScored)/len(self.teleCatchScored) if len(self.teleCatchScored) else 0
+        self.avgTeleAssistScored = sum(self.teleAssistScored)/len(self.teleAssistScored) if len(self.teleAssistScored) else 0
+        self.avgPostRegFoul = sum(self.postRegFouls)/len(self.postRegFouls) if len(self.postRegFouls) else 0
+        self.avgPostTechFoul = sum(self.postTechFouls)/len(self.postTechFouls) if len(self.postTechFouls) else 0
         
     def getAttr(self, source):
         return getattr(self, source)
@@ -100,8 +88,6 @@ class _TeamScores(object):
         self.woScores = []          # list holding weighted offensive scores
         self.wdScores = []          # list holding weighted defensive scores
         self.waScores = []          # list holding weighted assistive scores
-        self.taScores = []          # list holding tele-auto scores
-        self.hangScores = []        # list holding hang scores
         self.autoScores = []        # list holding auto scores
         self.teleScores = []        # list holding tele scores
         self.foulScores = []        # list holding foul scores
@@ -123,10 +109,6 @@ class _TeamScores(object):
         self.minWDScore = min(self.wdScores)
         self.maxWAScore = max(self.waScores)
         self.minWAScore = min(self.waScores)
-        self.maxTAScore = max(self.taScores)
-        self.minTAScore = min(self.taScores)
-        self.maxHangScore = max(self.hangScores)
-        self.minHangScore = min(self.hangScores)
         self.maxAutoScore = max(self.autoScores)
         self.minAutoScore = min(self.autoScores)
         self.maxTeleScore = max(self.teleScores)
@@ -134,10 +116,8 @@ class _TeamScores(object):
         self.maxFoulScore = max(self.foulScores)
         self.minFoulScore = min(self.foulScores)
 
-    def get_avgOff_scores(self, matches=1, offensive=0, hangs=0, auto=0, tele=0):
-        self.avgTAScore = sum(self.taScores)/matches if offensive else 0
+    def get_avgOff_scores(self, matches=1, offensive=0, auto=0, tele=0):
         self.avgOffScore = sum(self.oScores)/matches if offensive else 0
-        self.avgHangScore = sum(self.hangScores)/hangs if hangs else 0
         self.avgAutoScore = sum(self.autoScores)/auto if auto else 0
         self.avgTeleScore = sum(self.teleScores)/tele if tele else 0
         self.avgFoulScore = sum(self.foulScores)/matches if matches else 0
@@ -201,9 +181,7 @@ class TeamRankings(object):
     tot_rank = []
     auto_rank = []
     tele_rank = []
-    pyr_rank = []
     foul_rank = []
-    ta_rank = []
     w_rank = []
     wo_rank = []
     wd_rank = []
@@ -211,7 +189,7 @@ class TeamRankings(object):
     
     def __init__(self):
         print
-        # no none-static class variables
+        # no non-static class variables
         # team cannot track its own ranking:
             # rankings are defined by the user
             # rankings are dynamic, constantly changing to user request
@@ -249,8 +227,8 @@ class Team(object):
     def get_primary_details(self): # gets the offensive values of Team
         self.Info.get_more_info()
         self.Scores.get_avgOff_scores(len(self.Info.matches),
-                                   self.Info.numOff, self.Info.timesHanged,
-                                   self.Info.hadAuto, self.Info.hadTele)
+                                   self.Info.numOff,
+                                   self.Info.autoHadAuto, self.Info.teleHadTele)
 
     def get_secondary_details(self): # gets the defensive and assistive values of the team
         self.Info.get_final_info()
@@ -276,41 +254,31 @@ class Team(object):
         self.WeightedAst = round(self.Scores.avgWAScore,2)
         self.WeightedTotal = round(self.Scores.avgWScore,2)
 
-        self.pHadAuto = str(int(100*self.Info.hadAuto)/len(matches)) + "%"
-        self.pStartInZone = str(int(100*self.Info.startedInAuto)/len(matches)) + "%"
-        self.pOtherStrat = str(int(100*self.Info.otherAutoStrat)/len(matches)) + "%"
+        self.pHadAuto = str(int(100*self.Info.autoHadAuto)/len(matches)) + "%"
+        self.pMobilityBonus = str(int(100*self.Info.autoMobilityBonus)/len(matches)) + "%"
+        self.pGoalieZone = str(int(100*self.Info.autoGoalieZone)/len(matches)) + "%"
         self.avgAutoScore = round(self.Scores.avgAutoScore,2)
-        self.avgAutoPickUp = round(self.Info.avgAutoDiscsPU,2)
-        self.avgAutoDiscsScored = round(self.Info.avgAutoDiscsScored,2)
-        self.avgAutoTopDiscs = round(self.Info.avgAutoTopScored,2)
-        self.avgAutoMidDiscs = round(self.Info.avgAutoMidScored,2)
-        self.avgAutoLowDiscs = round(self.Info.avgAutoLowScored,2)
-        self.avgAutoDiscsPU = round(self.Info.avgAutoDiscsPU,2)
+        self.avgAutoHighScored = round(self.Info.avgAutoHighScored,2)
+        self.avgAutoLowScored = round(self.Info.avgAutoLowScored,2)
+        self.avgAutoHotScored = round(self.Info.avgAutoHotScored,2)
+        self.pHotAccuracy = str(100*round(self.Info.autoHotAccuracy,2)) + "%"
 
-        self.pWasDisabled = str(int(100*self.Info.disabled)/len(matches)) + "%"
-        self.avgDisabled = round((sum(self.Info.disabledState)/len(self.Info.disabledState)),3)
-        self.totalDisabled = self.Info.disabledCount
-        self.avgTotalPickUp = round(self.Info.avgDiscsPU,2)
-        self.avgFloorPickUp = round(self.Info.avgFloorDiscsPU,2)
-        self.avgStationPickUp = round(self.Info.avgStationDiscsPU,2)
         self.avgTeleScore = round(self.Scores.avgTeleScore,2)
-        self.avgTeleDiscsScored = round(self.Info.avgDiscsScored,2)
-        self.avgTelePyrDiscs = round(self.Info.avgTelePyrScored,2)
-        self.avgTeleTopDiscs = round(self.Info.avgTeleTopScored,2)
-        self.avgTeleMidDiscs = round(self.Info.avgTeleMidScored,2)
-        self.avgTeleLowDiscs = round(self.Info.avgTeleLowScored,2)
+        self.avgTeleHighScored = round(self.Info.avgTeleHighScored,2)
+        self.avgTeleHighAttempted = round(self.Info.avgTeleHighAttempted,2)
+        self.pTeleHighAccuracy = str(100*round(self.Info.teleHighAccuracy,2)) + "%"
+        self.avgTeleLowScored = round(self.Info.avgTeleLowScored,2)
+        self.avgTeleLowAttempted = round(self.Info.avgTeleLowAttempted,2)
+        self.pTeleLowAccuracy = str(100*round(self.Info.teleLowAccuracy,2)) + "%"  
+        self.avgTeleTrussScored = round(self.Info.avgTeleTrussScored,2)
+        self.avgTeleCatchScored = round(self.Info.avgTeleCatchScored,2)
+        self.avgTeleAssistScored = round(self.Info.avgTeleAssistScored,2)
 
-        self.avgHangScore = round(self.Scores.avgHangScore,2)
-        self.rHangSuccToAtt = str(round(self.Info.hangsSucctoAtt,2)) + " : 1"
-        self.pHanged = str(int(100*self.Info.timesHanged)/len(matches)) + "%"
-        self.avgSupportBot = round(sum(self.Info.supportsBot)/len(self.Info.supportsBot),2)
-        self.avgScoredOnPyr = round(sum(self.Info.scoredOnPyr)/len(self.Info.scoredOnPyr),2)
-
-        self.avgRegFoul = round(self.Info.avgRegFoul,2)
-        self.avgTechFoul = round(self.Info.avgTechFoul,2)
+        self.avgPostRegFoul = round(self.Info.avgPostRegFoul,2)
+        self.avgPostTechFoul = round(self.Info.avgPostTechFoul,2)
         self.avgFoulScore = round(self.Scores.avgFoulScore,2)
-        self.pYellow = str(int(100*self.Info.hadYellow)/len(matches)) + "%"
-        self.pRed = str(int(100*self.Info.hadRed)/len(matches)) + "%"
+        self.pYellow = str(int(100*self.Info.postHadYellow)/len(matches)) + "%"
+        self.pRed = str(int(100*self.Info.postHadRed)/len(matches)) + "%"
 
     def getAttr(self, source):
         return getattr(self, source)

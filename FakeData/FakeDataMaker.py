@@ -42,9 +42,9 @@ for team in teams:
         autoHotScore = random.randrange(0,autoScores) if HadAuto == 1 and GoalieZone == 0 and autoScores>0 else 0
 
         Disabled = random.randrange(0,25)
-        Disabed = 1 if Disabled == 24 else 0
+        Disabed = 0 if Disabled != 24 else 1
         Broken = random.randrange(0,50)
-        Broken = 1 if Broken == 49 else 0
+        Broken = 0 if Broken != 49 else 1
 
         NumberOfCycles = random.randrange(1,15)
 
@@ -58,16 +58,16 @@ for team in teams:
 
         Defensive = random.randrange(0,20)
         Defensive = 1 if Defensive == 19 else 0
-        Technical = random.randrange(0,25) if Disabled == 0 and Broken == 0 else 0
+        Technical = random.randrange(0,15) if Disabled == 0 and Broken == 0 else 0
         if Technical >= 4:
             Technical = 0
-        Regular = random.randrange(0,20) if Disabled == 0 and Broken == 0 else 0
-        if Regular >= 6:
+        Regular = random.randrange(0,10) if Disabled == 0 and Broken == 0 else 0
+        if Regular >= 4:
             Regular = 0
         YellowPenalty = random.randrange(0,50)
-        YellowPenalty = 1 if YellowPenalty == 49 and Disabled == 0 and Broken == 0 else 0
+        YellowPenalty = 0 if YellowPenalty != 49 and Disabled != 0 and Broken != 0 else 1
         RedPenalty = random.randrange(0,100)
-        RedPenalty = 1 if RedPenalty == 99 and Disabled == 0 and Broken == 0 else 0
+        RedPenalty = 0 if RedPenalty != 99 and Disabled != 0 and Broken != 0 else 1
 
         matchData.append(MatchNum)
         matchData.append(TeamNum)

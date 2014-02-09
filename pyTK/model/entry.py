@@ -16,90 +16,81 @@ class Entry(object):
     
     def __init__(self, data):
         # general info
-        self.match = data[0]
-        self.team = data[1]
-        self.allianceColor = data[2]
+        self.match = int(data[0])
+        self.team = int(data[1])
+        self.allianceColor = int(data[2])
 
         # autonomous data
-        self.startInAutoZone = bool(data[3])
-        self.autoDiscsPU = float(data[4])         # pass data to float to prevent truncation
-        self.autoTopDiscs = float(data[5])
-        self.autoMidDiscs = float(data[6])
-        self.autoLowDiscs = float(data[7])
-        self.autoOther = bool(data[8])
-
+        self.autoHadAuto = bool(data[3])
+        self.autoMobilityBonus = bool(data[4])
+        self.autoGoalieZone = bool(data[5])
+        self.autoHighScored = float(data[6])
+        self.autoLowScored = float(data[7])
+        self.autoHotScored = float(data[8])
+        
         # tele-op data
-        self.disabledCount = float(data[9])
-        self.scoreFromNotZone = bool(data[10])
-        self.teleFloorDiscsPU = float(data[11])
-        self.teleStationDiscsPU = float(data[12])
-        self.telePyrDiscs = float(data[13])
-        self.teleTopDiscs = float(data[14])
-        self.teleMidDiscs = float(data[15])
-        self.teleLowDiscs = float(data[16])
+        self.teleHighScored = float(data[9])
+        self.teleHighAttempted = float(data[10])
+        self.teleLowScored = float(data[11])
+        self.teleLowAttempted = float(data[12])
+        self.teleTrussScored = float(data[13])
+        self.teleCatchScored = float(data[14])
+        self.teleAssistScored = float(data[15])
 
-        # pyramid data
-        self.scoresWhileOnPyr = bool(data[17])
-        self.supportsAnotherBot = bool(data[18])
-        self.hangLevel = float(data[19] + 1)        # add 1 to make data return logical (0 = 1, etc.)
-        self.hangSuccess = bool(data[20])
+        # post data
+        self.postRegFouls = float(data[16])
+        self.postTechFouls = float(data[17])
+        self.postDisabled = bool(data[18])
+        self.postBroken = bool(data[19])
+        self.postYellowCard = bool(data[20])
+        self.postRedCard = bool(data[21])
+        self.postDefensive = bool(data[22])
 
-        # end data
-        self.defensive = bool(data[21])
-        self.assistive = bool(data[22])
-        self.technicalFoul = float(data[23])
-        self.regularFoul = float(data[24])
-        self.yellowFlag = bool(data[25])
-        self.redFlag = bool(data[26])
-
-        self.disabled = True if self.disabledCount > 0 else False
-        self.teleDiscsScored = (self.telePyrDiscs + self.teleTopDiscs +
-                                self.teleMidDiscs + self.teleLowDiscs)
-        self.autoDiscsScored = (self.autoTopDiscs + self.autoMidDiscs +
-                                self.autoLowDiscs)
-        self.teleDiscsPU = self.teleFloorDiscsPU + self.teleStationDiscsPU
-
+        self.autoScored = self.autoHighScored + self.autoLowScored
+        self.teleScored = self.teleHighScored + self.teleLowScored
+        self.teleTCScored = self.teleTrussScored + self.teleCatchScored
+        self.teleHadTele = True if self.teleScored>0 or self.teleTCScored>0 or self.teleAssistScored>0 else False
+        
         self.entries.append(self)
 
     def primary_sort(self):
         """Calculates basic scoring and information."""
-
-        self.autoScore = ((2*self.autoLowDiscs) + (4*self.autoMidDiscs) +
-                          (6*self.autoTopDiscs))
-        self.teleScore = ((1*self.teleLowDiscs) + (2*self.teleMidDiscs) +
-                          (3*self.teleTopDiscs) + (5*self.telePyrDiscs))
+        self.autoScore = (((self.autoHighScored*10)+5)
+                        +((self.autoLowScored*1)+5)
+                        +(self.autoHotScored*5))
+        
+        self.teleScore = ((self.teleHighScored*10)
+                        +(self.teleLowScored*1)
+                        +(self.teleTrussScored*10)
+                        +(self.teleCatchScored*10)
+                        +(self.teleAssistScored*10))
 
         self.scoredInAuto = True if self.autoScore > 0 else False
         self.scoredInTele = True if self.teleScore > 0 else False
-        self.hasTechFoul = True if self.technicalFoul > 0 else False
-        self.hasRegFoul = True if self.regularFoul > 0 else False
+        self.hasRegFoul = True if self.postRegFouls > 0 else False
+        self.hasTechFoul = True if self.postTechFouls > 0 else False
 
-        self.hangScore = (10*self.hangLevel) if self.hangSuccess else 0
-        self.attemptedHangScore = (10*self.hangLevel)
-
-        self.offensiveScore = self.autoScore + self.teleScore + self.hangScore
-        self.teleautoScore = self.autoScore + self.teleScore
-        self.foulScore = (3*self.regularFoul) + (20*self.technicalFoul)
+        self.offensiveScore = self.autoScore + self.teleScore
+        self.foulScore = (20*self.postRegFouls) + (50*self.postTechFouls)
 
         self.offensive = True if self.offensiveScore > 0 else False
+        self.assistive = True if self.teleAssistScored > 0 else False
+        self.defensive = self.postDefensive
 
-    def secondary_sort(self, oppAvg, oppOff, allAvg, allOff, allDef, allAst):
-        """Calculates defensive and assistive score values."""
-        # result = difference between teleauto scores (exluding own score) +
-        #          difference between hang scores (exluding own score) /
+    def secondary_sort(self, oppOff, allOff, allDef):
+        """Calculates defensive and assisstive score values."""
+        # result = difference between offensive scores /
         #          the number of defensive players
-        self.defensiveScore = (((allAvg - self.teleautoScore) - oppAvg) +
-                               (((allOff - self.hangScore) - allAvg) - (oppOff-oppAvg))) / allDef if self.defensive else 0
-        # result = alliance's score without team's offensive contribution /
-        #          the number of assistive players - team's offensive score
-        self.assistiveScore = (((allOff-self.offensiveScore)/allAst)-self.offensiveScore) if self.assistive else 0
-
+        self.defensiveScore = (allOff-oppOff) / allDef if self.defensive else 0
+        # assistive score this year is really easy: just take the points from assists
+        self.assistiveScore = self.teleAssistScored*10
+        
     def tertiary_sort(self):
         """Calculates total scores."""
         self.totalScore = (self.offensiveScore + self.defensiveScore +
                            self.assistiveScore - self.foulScore)
-        self.totalTAScore = (self.teleautoScore +
-                             self.defensiveScore + self.assistiveScore)
+        self.totalTAScore = (self.offensiveScore + self.defensiveScore +
+                             self.assistiveScore)
 
 #------------------------------------------------------------------------------
 # PitEntry class
