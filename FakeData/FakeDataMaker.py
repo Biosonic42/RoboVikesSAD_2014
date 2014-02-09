@@ -4,6 +4,7 @@ teams = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27
 
 TrueFalse = [0,1]
 MatchesFull = []
+Matches = []
 
 totalData = []
 
@@ -16,21 +17,22 @@ def FullCheck(List, x, y):
   
 for team in teams:
     i = 0
-    MatchNums = []
     teamData = []
+    MatchNums = []
     MatchNum = 0
     HadAuto = 0
     while i < 12: # give each team 12 matches
         matchData = []
         while MatchNum in MatchesFull or MatchNum == 0 or FullCheck(MatchNums, MatchNum, 1):
-            MatchNum = random.randrange(1,81)
+            MatchNum = random.randrange(1,82)
 
+        Matches.append(MatchNum)
         MatchNums.append(MatchNum)
-        if FullCheck(MatchNums, MatchNum, 6): MatchesFull.append(MatchNum)
+        if FullCheck(Matches, MatchNum, 6): MatchesFull.append(MatchNum)
         
         TeamNum = team
 
-        AllianceColor = 1 if FullCheck(MatchNums, MatchNum, 3) else 0
+        AllianceColor = 1 if FullCheck(Matches, MatchNum, 3) else 0
 
         if HadAuto != 1: HadAuto = random.randrange(0,10)
         HadAuto = 1 if HadAuto<4 and HadAuto>0 else 0
@@ -42,11 +44,14 @@ for team in teams:
         autoHotScore = random.randrange(0,autoScores) if HadAuto == 1 and GoalieZone == 0 and autoScores>0 else 0
 
         Disabled = random.randrange(0,25)
-        Disabed = 0 if Disabled != 24 else 1
+        if Disabled == 24:
+            Disabled = 1
+        else:
+            Disabled = 0
         Broken = random.randrange(0,50)
         Broken = 0 if Broken != 49 else 1
 
-        NumberOfCycles = random.randrange(1,15)
+        NumberOfCycles = random.randrange(1,9)
 
         teleHighScore = random.randrange(0,NumberOfCycles) if Disabled == 0 and Broken == 0 else 0
         teleHighAttempt = random.randrange(teleHighScore, NumberOfCycles*3) if Disabled == 0 and Broken == 0 else 0
@@ -54,20 +59,20 @@ for team in teams:
         teleLowAttempt = random.randrange(teleLowScore, NumberOfCycles*3) if Disabled == 0 and Broken == 0 else 0
         teleTrussScore = random.randrange(0,NumberOfCycles) if Disabled == 0 and Broken == 0 else 0
         teleCatchScore = random.randrange(0,NumberOfCycles-teleTrussScore) if Disabled == 0 and Broken == 0 and (NumberOfCycles-teleTrussScore)>0 else 0
-        teleAssistScore = random.randrange(0,NumberOfCycles*2) if Disabled == 0 and Broken == 0 else 0            
+        teleAssistScore = random.randrange(0,NumberOfCycles) if Disabled == 0 and Broken == 0 else 0            
 
-        Defensive = random.randrange(0,20)
-        Defensive = 1 if Defensive == 19 else 0
+        Defensive = random.randrange(0,10)
+        Defensive = 0 if Defensive != 9 else 1
         Technical = random.randrange(0,15) if Disabled == 0 and Broken == 0 else 0
-        if Technical >= 4:
+        if Technical > 4:
             Technical = 0
         Regular = random.randrange(0,10) if Disabled == 0 and Broken == 0 else 0
-        if Regular >= 4:
+        if Regular > 4:
             Regular = 0
         YellowPenalty = random.randrange(0,50)
-        YellowPenalty = 0 if YellowPenalty != 49 and Disabled != 0 and Broken != 0 else 1
+        YellowPenalty = 0 if YellowPenalty != 49 and Disabled == 0 and Broken == 0 else 1
         RedPenalty = random.randrange(0,100)
-        RedPenalty = 0 if RedPenalty != 99 and Disabled != 0 and Broken != 0 else 1
+        RedPenalty = 0 if RedPenalty != 99 and Disabled == 0 and Broken == 0 else 1
 
         matchData.append(MatchNum)
         matchData.append(TeamNum)
@@ -97,6 +102,7 @@ for team in teams:
         matchData.append(Defensive)
         
         teamData.append(matchData)
+        print matchData
 
         i+=1
 
