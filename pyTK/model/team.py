@@ -274,6 +274,8 @@ class Team(object):
         self.avgTeleCatchScored = round(self.Info.avgTeleCatchScored,2)
         self.avgTeleAssistScored = round(self.Info.avgTeleAssistScored,2)
 
+        self.pDisabled = str(int(100*self.Info.postDisabled)/len(matches)) + "%"
+        self.pBroken  = str(int(100*self.Info.postBroken)/len(matches)) + "%"
         self.avgPostRegFoul = round(self.Info.avgPostRegFoul,2)
         self.avgPostTechFoul = round(self.Info.avgPostTechFoul,2)
         self.avgFoulScore = round(self.Scores.avgFoulScore,2)

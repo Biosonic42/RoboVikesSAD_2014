@@ -102,11 +102,19 @@ for team in teams:
         matchData.append(Defensive)
         
         teamData.append(matchData)
-        print matchData
 
         i+=1
 
     totalData.append(teamData)
 
 dataFile = open("data.txt", "w")
-dataFile.writelines(["%s\n" % item for item in totalData])
+for team in totalData:
+    for matchData in team:
+        i = 0
+        for item in matchData:
+            if i != 22:
+                dataFile.writelines(["%s," % item])
+            else:
+                dataFile.writelines(["%s" % item])
+            i+=1
+        dataFile.writelines("\n")

@@ -54,6 +54,8 @@ toPrint.append(printable("pTeleLowAccuracy"))
 toPrint.append(printable("avgTeleTrussScored"))
 toPrint.append(printable("avgTeleCatchScored"))
 toPrint.append(printable("avgTeleAssistScored"))
+toPrint.append(printable("pDisabled"))
+toPrint.append(printable("pBroken"))
 toPrint.append(printable("avgPostRegFoul"))
 toPrint.append(printable("avgPostTechFoul"))
 toPrint.append(printable("avgFoulScore"))
@@ -97,15 +99,15 @@ while running:
                     for value in toPrint:
                         print str(value.type) + " : " + str(team.getAttr(value.type))
                     print "Load Max and Min Scores? (0 = no, 1 = yes)"
-                    if tkSimpleDialog.askstring("Response","_",parent=app,initialvalue=1):
+                    if tkSimpleDialog.askstring("Response","_",parent=app,initialvalue=1)==1:
                         for value in toPrintMAXMIN:
                             print str(value.type) + " : " + str(team.Scores.getAttr(value.type))
 
             print "Continue (0 = no, 1 = yes)"
-            continueing = tkSimpleDialog.askstring("Response","_",parent=app,initialvalue=1)
+            continueing = tkSimpleDialog.askstring("Response","_",parent=app,initialvalue=1)==1
     
     print "Import a different file? (0 = no, 1 = yes)"
-    running = tkSimpleDialog.askstring("Response","_",parent=app,initialvalue=0)
+    running = tkSimpleDialog.askstring("Response","_",parent=app,initialvalue=0)==1
 
 
 print "Closing Model Tester."
