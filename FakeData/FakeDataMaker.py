@@ -38,8 +38,8 @@ for team in teams:
         HadAuto = 1 if HadAuto<4 and HadAuto>0 else 0
         GoalieZone = random.choice(TrueFalse) if HadAuto == 1 else 0
         MobilityBonus = random.choice(TrueFalse) if HadAuto == 1 and GoalieZone == 0 else 0
-        autoHighScore = random.randrange(0,4) if HadAuto == 1 and GoalieZone == 0 else 0
-        autoLowScore = random.randrange(0,4-autoHighScore) if HadAuto == 1 and GoalieZone == 0 and 4-autoHighScore>0 else 0
+        autoHighScore = random.randrange(0,2) if HadAuto == 1 and GoalieZone == 0 else 0
+        autoLowScore = random.randrange(0,2) if HadAuto == 1 and GoalieZone == 0 else 0
         autoScores = autoHighScore+autoLowScore
         autoHotScore = random.randrange(0,autoScores) if HadAuto == 1 and GoalieZone == 0 and autoScores>0 else 0
 

@@ -79,9 +79,13 @@ class Search(Frame):
         self.searchFrame = Frame(self)
         self.searchFrame.pack(side=LEFT,padx=5,pady=5)
 
+        # create the frame to show the search entry options in
+        self.searchEntryFrame = Frame(self.searchFrame)
+        self.searchEntryFrame.pack(side=LEFT,padx=5,pady=5)
+
         # make the entry option widgets
         for x, y in self.controller.entryItemTypes:
-            self.entryFrame = Frame(self.searchFrame)
+            self.entryFrame = Frame(self.searchEntryFrame)
             self.entryFrame.pack(side=TOP,pady=5)
             
             self.label = Label(self.entryFrame,text=y)
@@ -93,10 +97,14 @@ class Search(Frame):
             self.searchEntry.bind("<Return>",lambda event, value=self.searchEntryVar,index=x:self.updateMatches(event,value,index))
             self.searchEntry.pack(side=LEFT,padx=5)
 
+        # create the frame to show the search checkbutton options in
+        self.searchCheckFrame = Frame(self.searchFrame)
+        self.searchCheckFrame.pack(side=RIGHT,padx=5,pady=5)
+        
         # make the checkbutton option widgets
         for x, y in self.controller.checkItemTypes:
             self.searchCheckVar = BooleanVar()
-            self.searchCheck = Checkbutton(self.searchFrame,text=y,
+            self.searchCheck = Checkbutton(self.searchCheckFrame,text=y,
                                            variable = self.searchCheckVar,
                                            command = lambda value=self.searchCheckVar,index=x:self.updateMatches(value=value,index=index))
             self.searchCheck.pack(side=TOP,padx=5,pady=2)
@@ -112,7 +120,7 @@ class Search(Frame):
         # add matching teams to the list
         self.scrollbar = Scrollbar(self.matchesFrame)
         self.scrollbar.pack(side=RIGHT,fill=Y)
-        self.matchesList = Listbox(self.matchesFrame,width=20,height=20,
+        self.matchesList = Listbox(self.matchesFrame,width=20,height=15,
                                       yscrollcommand=self.scrollbar.set)
         self.labelVars = []
         for team in self.controller.matchedList:
@@ -136,7 +144,7 @@ class Search(Frame):
         # add wanted teams to the list
         self.wantedScroller = Scrollbar(self.wantedFrame)
         self.wantedScroller.pack(side=RIGHT,fill=Y)
-        self.wantedList = ddlist.DDList(self.wantedFrame,width=20,height=20,
+        self.wantedList = ddlist.DDList(self.wantedFrame,width=20,height=15,
                                   yscrollcommand=self.wantedScroller.set)
         self.wantedList.bind("<Double-Button-1>",lambda event: self.load_team(data=self.wantedList.curselection(),wanted=True))
         self.wantedList.bind("<Return>",lambda event: self.load_team(data=self.wantedList.curselection(),wanted=True))

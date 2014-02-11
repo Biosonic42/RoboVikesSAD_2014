@@ -28,6 +28,7 @@ class TeamData(Frame):
         
     def show(self):   
         if self.shown == False:
+            
             #make the frame to show data to
             self.dataFrame = Frame(self, relief=SUNKEN,bd=1)
             self.dataFrame.pack(side=BOTTOM,pady=10)
@@ -35,7 +36,7 @@ class TeamData(Frame):
             #make the listbox and scroller containing maxmin values
             self.scrollbar2 = Scrollbar(self.dataFrame)
             self.scrollbar2.pack(side=RIGHT,fill=Y)
-            self.teamScores = Listbox(self.dataFrame,height=30,width=50,
+            self.teamScores = Listbox(self.dataFrame,height=20,width=50,
                                       yscrollcommand=self.scrollbar2.set)
             for x, y in self.controller.maxminLabelVals:
                 self.labelVar = str(y) + str(self.controller.data.Scores.getAttr(x))
@@ -46,7 +47,7 @@ class TeamData(Frame):
             #make the listbox and scroller containing information values
             self.scrollbar = Scrollbar(self.dataFrame)
             self.scrollbar.pack(side=RIGHT,fill=Y)
-            self.teamData = Listbox(self.dataFrame,height=30,width=50,
+            self.teamData = Listbox(self.dataFrame,height=20,width=50,
                                     yscrollcommand=self.scrollbar.set)
             for x, y in self.controller.dataLabelVals:
                 self.labelVar = str(y) + str(self.controller.data.getAttr(x))
@@ -72,7 +73,7 @@ class TeamData(Frame):
             # make an empty graph canvas to satisfy the frame
             self.graph = Canvas(self.graphFrame,width=256,height=192)
             self.graph.pack()
-
+            
             self.shown = True
 
     def hide(self):

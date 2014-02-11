@@ -91,7 +91,7 @@ class App(Frame):
         self.parent = parent
         self.imported = False
 
-        self.parent.title("SAD 0.1")
+        self.parent.title("SAD 1.0")
         self.parent.geometry("+0+0")
         Frame.__init__(self,parent)
         self.pack()

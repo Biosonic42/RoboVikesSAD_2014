@@ -26,7 +26,7 @@ class RankingController():
                     "Offensive Score","Defensive Score","Assistive Score","Total Score",
                     "Weighted Offensive Score","Weighted Defensive Score",
                     "Weighted Assistive Score","Weighted Total Score",
-                    "Auto Score","Tele Score","Hang Score","Foul Score"]
+                    "Auto Score","Tele Score","Foul Score"]
 
     rankingIndex = [("None",get_none),
                     ("Offensive Score",get_off_rank),
@@ -38,7 +38,7 @@ class RankingController():
                     ("Weighted Assistive Score",get_wa_rank),
                     ("Weighted Total Score",get_w_rank),
                     ("Auto Score",get_auto_rank),("Tele Score",get_tele_rank),
-                    ("Hang Score",get_pyr_rank),("Foul Score",get_foul_rank)]
+                    ("Foul Score",get_foul_rank)]
 
     sortOptions = [("Maximum","max"),("Average","avg"),("Minimum","min")]
 

@@ -3,7 +3,7 @@
 #   -- functions for handling data input, output, and caclulations
 #------------------------------------------------------------------------------
 import math
-#from statlib import stats
+from statlib import stats
 
 from team import *
 from entry import *
@@ -166,11 +166,13 @@ def assign_basic_team_values(team, entry):
 
     team.Info.teleHadTele += int(entry.teleHadTele)
     team.Info.teleHighScored.append(entry.teleHighScored)
+    team.Info.teleScoredHigh += 1 if entry.teleHighScored>=1 else 0
     team.Info.teleHighAttempted.append(entry.teleHighAttempted)
     team.Info.teleLowScored.append(entry.teleLowScored)
     team.Info.teleLowAttempted.append(entry.teleLowAttempted)
     team.Info.teleTrussScored.append(entry.teleTrussScored)
     team.Info.teleCatchScored.append(entry.teleCatchScored)
+    team.Info.teleCaught += 1 if entry.teleCatchScored>=1 else 0
     team.Info.teleAssistScored.append(entry.teleAssistScored)
     team.Info.teleScoredTele += int(entry.scoredInTele)
 
@@ -315,13 +317,13 @@ def get_auto_rank(sort="avg",rev=True):
     
     for team in Team.team_list:
         if sort == "avg":
-            if team.Info.hadAuto > 0:
+            if team.Info.autoHadAuto > 0:
                 TeamRankings.auto_rank.append([team.Scores.avgAutoScore,team.number])
         elif sort == "max":
-            if team.Info.hadAuto > 0:
+            if team.Info.autoHadAuto > 0:
                 TeamRankings.auto_rank.append([team.Scores.maxAutoScore,team.number])
         elif sort == "min":
-            if team.Info.hadAuto > 0:
+            if team.Info.autoHadAuto > 0:
                 TeamRankings.auto_rank.append([team.Scores.minAutoScore,team.number])
 
     TeamRankings.auto_rank.sort(reverse=rev)
@@ -334,13 +336,13 @@ def get_tele_rank(sort="avg",rev=True):
     
     for team in Team.team_list:
         if sort == "avg":
-            if team.Info.hadTele > 0:
+            if team.Info.teleHadTele > 0:
                 TeamRankings.tele_rank.append([team.Scores.avgTeleScore,team.number])
         elif sort == "max":
-            if team.Info.hadTele > 0:
+            if team.Info.teleHadTele > 0:
                 TeamRankings.tele_rank.append([team.Scores.maxTeleScore,team.number])
         elif sort == "min":
-            if team.Info.hadTele > 0:
+            if team.Info.teleHadTele > 0:
                 TeamRankings.tele_rank.append([team.Scores.minTeleScore,team.number])
 
     TeamRankings.tele_rank.sort(reverse=rev)
@@ -353,13 +355,13 @@ def get_foul_rank(sort="avg",rev=False): # foul rank default from least points t
     
     for team in Team.team_list:
         if sort == "avg":
-            if team.Info.hadRegFoul or team.Info.hadTechFoul:
+            if team.Info.postHadRegFoul or team.Info.postHadTechFoul:
                 TeamRankings.foul_rank.append([team.Scores.avgFoulScore,team.number])
         elif sort == "max":
-            if team.Info.hadRegFoul or team.Info.hadTechFoul:
+            if team.Info.postHadRegFoul or team.Info.postHadTechFoul:
                 TeamRankings.foul_rank.append([team.Scores.maxFoulScore,team.number])
         elif sort == "min":
-            if team.Info.hadRegFoul or team.Info.hadTechFoul:
+            if team.Info.postHadRegFoul or team.Info.postHadTechFoul:
                 TeamRankings.foul_rank.append([team.Scores.minFoulScore,team.number])
 
     TeamRankings.foul_rank.sort(reverse=rev)

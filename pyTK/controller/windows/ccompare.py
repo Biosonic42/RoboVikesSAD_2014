@@ -21,10 +21,9 @@ class CompareController():
                        "Alliance 7","Alliance 8"]
     
     compareIndex = [("avgOff","Avg OffScore"),("avgDef","Avg DefScore"),("avgAst","Avg AstScore"),
-                    ("avgAutoScore","Avg AutoScore"),("avgAutoDiscsScored","Avg AutoDiscs"),
-                    ("avgTeleScore","Avg TeleScore"),("avgTeleDiscsScored","Avg TeleDiscs"),
-                    ("avgHangScore","Avg HangScore"),("rHangSuccToAtt","Hang Ratio"),
-                    ("avgFoulScore","Avg FoulScore")]
+                    ("avgAutoScore","Avg AutoScore"),("avgTeleScore","Avg TeleScore"),("avgFoulScore","Avg FoulScore"),
+                    ("pHadAuto","Had Auto %"),("pHotAccuracy","Hot Accuracy %"),
+                    ("pTeleHighAccuracy","Tele High Accuracy %"),("pTeleLowAccuracy","Tele Low Accuracy %")]
     
     def __init__(self):
         self.available = []

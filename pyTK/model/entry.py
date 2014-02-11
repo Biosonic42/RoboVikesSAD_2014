@@ -55,9 +55,10 @@ class Entry(object):
 
     def primary_sort(self):
         """Calculates basic scoring and information."""
-        self.autoScore = (((self.autoHighScored*10)+5)
-                        +((self.autoLowScored*1)+5)
-                        +(self.autoHotScored*5))
+        self.autoScore = (self.autoHighScored*10
+                        + self.autoLowScored*1
+                        + self.autoHotScored*5
+                        + self.autoScored*5)
         
         self.teleScore = ((self.teleHighScored*10)
                         +(self.teleLowScored*1)

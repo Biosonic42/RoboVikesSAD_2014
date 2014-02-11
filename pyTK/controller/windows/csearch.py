@@ -20,15 +20,15 @@ class SearchController():
                         ("WeightedAst","Weighted Assistive Score >= "),
                         ("WeightedTotal","Weighted Total Score >= "),
                         ("avgAutoScore","Auto Score >= "),("avgTeleScore","Tele Score >= "),
-                        ("avgHangScore","Hang Score >= ")]
+                        ("avgFoulScore","Foul Score >= ")]
     
     checkItemTypes = [("numOff","Played Offensive"),("numDef","Played Defensive"),("numAst","Played Assistive"),
-                    ("scoredAuto","Scored in Autonomous"),("startedInAuto","Started in Autonomous Zone"),
-                    ("otherAutoStrat","Had Other Autonomous Strategy"),("timesHanged","Hung from Pyramid"),
-                    ("totalSupportsBot","Assisted Another Robot in Hanging"),
-                    ("totalScoredOnPyr","Scored While On Pyramid"),("disabledCount","Never Disabled"),
-                    ("hadRegFoul","No Regular Fouls"),("hadTechFoul","No Technical Fouls"),
-                    ("hadYellow","No Yellow Cards"),("hadRed","No Red Cards")]
+                    ("autoHadAuto","Had Autonomous"),("autoScoredAuto","Scored in Autonomous"),
+                    ("autoGoalieZone","Started in Goalie Zone"),("autoMobilityBonus","Obtained Mobility Bonus"),
+                    ("teleScoredTele","Scored in Tele"),("teleScoredHigh","Scored in High Goal (Tele-Op)"),
+                    ("teleCaught","Caught a Ball"),("postDisabled","Never Disabled"),("postBroken","Never Broken"),
+                    ("postHadRegFoul","No Regular Fouls"),("postHadTechFoul","No Technical Fouls"),
+                    ("postHadYellow","No Yellow Cards"),("postHadRed","No Red Cards")]
                     
     def searchGreater(self, value=None, index=None):
         try:
@@ -57,14 +57,14 @@ class SearchController():
                 "WeightedOff":searchGreater,"WeightedDef":searchGreater,
                 "WeightedAst":searchGreater,"WeightedTotal":searchGreater,
                 "avgAutoScore":searchGreater,"avgTeleScore":searchGreater,
-                "avgHangScore":searchGreater,
+                "avgFoulScore":searchGreater,
                 "numOff":searchHas,"numDef":searchHas,"numAst":searchHas,
-                "scoredAuto":searchHas,"startedInAuto":searchHas,
-                "otherAutoStrat":searchHas,"timesHanged":searchHas,
-                "totalSupportsBot":searchHas,"totalScoredOnPyr":searchHas,
-                "disabledCount":searchNever,
-                "hadRegFoul":searchNever,"hadTechFoul":searchNever,
-                "hadYellow":searchNever,"hadRed":searchNever}
+                "autoHadAuto":searchHas,"autoScoredAuto":searchHas,
+                "autoGoalieZone":searchHas,"autoMobilityBonus":searchHas,
+                "teleScoredTele":searchHas,"teleScoredHigh":searchHas,"teleCaught":searchHas,
+                "postDisabled":searchNever,"postBroken":searchNever,
+                "postHadRegFoul":searchNever,"postHadTechFoul":searchNever,
+                "postHadYellow":searchNever,"postHadRed":searchNever}
 
     def search(self):
         self.matchedList = team.Team.team_list

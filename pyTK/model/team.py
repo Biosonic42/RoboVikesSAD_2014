@@ -27,11 +27,13 @@ class _TeamInfo(object):
 
         self.teleHadTele = 0        # the number of matches for which the robot scored in tele-op mode
         self.teleHighScored = []    # list holding the number of scores in the high goal in tele-op (by match)
+        self.teleScoredHigh = 0     # the number of matches for which the team scored in the high goal (search field)
         self.teleHighAttempted = [] # list holding the number of attempted scores in the high goal in tele-op (by match)
         self.teleLowScored = []     # list holding the number of scores in the high goal in tele-op (by match)
         self.teleLowAttempted = []  # list holding the number of attempted scores in the high goal in tele-op (by match)
         self.teleTrussScored = []   # list holding the number of successful truss scores in tele-op (by match)
         self.teleCatchScored = []   # list holding the number of successful catch scores in tele-op (by match)
+        self.teleCaught = 0         # the number of matches for which the team caught a ball (search field)
         self.teleAssistScored = []  # list holding the number of successful assist scores in tele-op (by match)
         self.teleScoredTele = 0     # the number of matches for which the team scored (in a goal) in tele-op mode
         
