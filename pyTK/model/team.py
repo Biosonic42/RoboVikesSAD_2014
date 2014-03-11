@@ -26,11 +26,10 @@ class _TeamInfo(object):
         self.autoScoredAuto = 0     # the number of matches for which the team scored in autonomous mode
 
         self.teleHadTele = 0        # the number of matches for which the robot scored in tele-op mode
+        self.teleNumCycles = []     # list holding the number of cycles for the robot each match
         self.teleHighScored = []    # list holding the number of scores in the high goal in tele-op (by match)
         self.teleScoredHigh = 0     # the number of matches for which the team scored in the high goal (search field)
-        self.teleHighAttempted = [] # list holding the number of attempted scores in the high goal in tele-op (by match)
         self.teleLowScored = []     # list holding the number of scores in the high goal in tele-op (by match)
-        self.teleLowAttempted = []  # list holding the number of attempted scores in the high goal in tele-op (by match)
         self.teleTrussScored = []   # list holding the number of successful truss scores in tele-op (by match)
         self.teleCatchScored = []   # list holding the number of successful catch scores in tele-op (by match)
         self.teleCaught = 0         # the number of matches for which the team caught a ball (search field)
@@ -49,10 +48,6 @@ class _TeamInfo(object):
     def get_more_info(self):
         self.autoHotAccuracy = sum(self.autoHotScored)/(sum(self.autoHighScored)+sum(self.autoLowScored)) \
                                 if (sum(self.autoHighScored)+sum(self.autoLowScored))>0 else 0
-        self.teleHighAccuracy = sum(self.teleHighScored)/sum(self.teleHighAttempted) \
-                                 if sum(self.teleHighAttempted)>0 else 0
-        self.teleLowAccuracy = sum(self.teleLowScored)/sum(self.teleLowAttempted) \
-                                if sum(self.teleLowAttempted)>0 else 0
         self.totalTrussScores = sum(self.teleTrussScored)
         self.totalCatchScores = sum(self.teleCatchScored)
         self.totalAssistScores = sum(self.teleAssistScored)
@@ -61,10 +56,9 @@ class _TeamInfo(object):
         self.avgAutoHighScored = sum(self.autoHighScored)/len(self.autoHighScored) if len(self.autoHighScored) else 0
         self.avgAutoLowScored = sum(self.autoLowScored)/len(self.autoLowScored) if len(self.autoLowScored) else 0
         self.avgAutoHotScored = sum(self.autoHotScored)/len(self.autoHotScored) if len(self.autoHotScored) else 0
+        self.avgTeleNumCycles = sum(self.teleNumCycles)/len(self.teleNumCycles)
         self.avgTeleHighScored = sum(self.teleHighScored)/len(self.teleHighScored) if len(self.teleHighScored) else 0
-        self.avgTeleHighAttempted = sum(self.teleHighAttempted)/len(self.teleHighAttempted) if len(self.teleHighAttempted) else 0
         self.avgTeleLowScored = sum(self.teleLowScored)/len(self.teleLowScored) if len(self.teleLowScored) else 0
-        self.avgTeleLowAttempted = sum(self.teleLowAttempted)/len(self.teleLowAttempted) if len(self.teleLowAttempted) else 0
         self.avgTeleTrussScored = sum(self.teleTrussScored)/len(self.teleTrussScored) if len(self.teleTrussScored) else 0
         self.avgTeleCatchScored = sum(self.teleCatchScored)/len(self.teleCatchScored) if len(self.teleCatchScored) else 0
         self.avgTeleAssistScored = sum(self.teleAssistScored)/len(self.teleAssistScored) if len(self.teleAssistScored) else 0
@@ -266,12 +260,9 @@ class Team(object):
         self.pHotAccuracy = str(100*round(self.Info.autoHotAccuracy,2)) + "%"
 
         self.avgTeleScore = round(self.Scores.avgTeleScore,2)
+        self.avgTeleNumCycles = round(self.Info.avgTeleNumCycles,2)
         self.avgTeleHighScored = round(self.Info.avgTeleHighScored,2)
-        self.avgTeleHighAttempted = round(self.Info.avgTeleHighAttempted,2)
-        self.pTeleHighAccuracy = str(100*round(self.Info.teleHighAccuracy,2)) + "%"
-        self.avgTeleLowScored = round(self.Info.avgTeleLowScored,2)
-        self.avgTeleLowAttempted = round(self.Info.avgTeleLowAttempted,2)
-        self.pTeleLowAccuracy = str(100*round(self.Info.teleLowAccuracy,2)) + "%"  
+        self.avgTeleLowScored = round(self.Info.avgTeleLowScored,2)  
         self.avgTeleTrussScored = round(self.Info.avgTeleTrussScored,2)
         self.avgTeleCatchScored = round(self.Info.avgTeleCatchScored,2)
         self.avgTeleAssistScored = round(self.Info.avgTeleAssistScored,2)

@@ -165,11 +165,10 @@ def assign_basic_team_values(team, entry):
     team.Info.autoScoredAuto += int(entry.scoredInAuto)
 
     team.Info.teleHadTele += int(entry.teleHadTele)
+    team.Info.teleNumCycles.append(float(entry.teleNumCyc))
     team.Info.teleHighScored.append(entry.teleHighScored)
     team.Info.teleScoredHigh += 1 if entry.teleHighScored>=1 else 0
-    team.Info.teleHighAttempted.append(entry.teleHighAttempted)
     team.Info.teleLowScored.append(entry.teleLowScored)
-    team.Info.teleLowAttempted.append(entry.teleLowAttempted)
     team.Info.teleTrussScored.append(entry.teleTrussScored)
     team.Info.teleCatchScored.append(entry.teleCatchScored)
     team.Info.teleCaught += 1 if entry.teleCatchScored>=1 else 0

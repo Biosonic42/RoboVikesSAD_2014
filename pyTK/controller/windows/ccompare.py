@@ -22,8 +22,7 @@ class CompareController():
     
     compareIndex = [("avgOff","Avg OffScore"),("avgDef","Avg DefScore"),("avgAst","Avg AstScore"),
                     ("avgAutoScore","Avg AutoScore"),("avgTeleScore","Avg TeleScore"),("avgFoulScore","Avg FoulScore"),
-                    ("pHadAuto","Had Auto %"),("pHotAccuracy","Hot Accuracy %"),
-                    ("pTeleHighAccuracy","Tele High Accuracy %"),("pTeleLowAccuracy","Tele Low Accuracy %")]
+                    ("pHadAuto","Had Auto %"),("pHotAccuracy","Hot Accuracy %")]
     
     def __init__(self):
         self.available = []

@@ -31,9 +31,13 @@ def import_data(Filename=""):
     try:
         print
         for line in newData:
-            newEntry = Entry(parse_data(line))
-        print
-        print "Parsing Data"
+            if line == "end": break
+            try:
+                newEntry = Entry(parse_data(line))
+            except:
+                print "bad MatchData"
+        print 
+        print "Data Parsed"
 
         model.imported = True
     except:
@@ -68,20 +72,17 @@ def import_pitData(Filename=""):
 #------------------------------------------------------------------------------
 def parse_data(info):
     data = []
-    i = 0
     new = ""
     for character in info:
-        if character != "," and character != "\n":
+        if character != "\n" and character !=",":
             new += str(character)
-        else:
+        else:  
             try:
                 data.append(int(new))
+                new=""
             except:
                 break
-                
-            new = ""
-            i += 1
-            if i >= 23: break
+            if "\n" in character: break
     return data
 
 def parse_pitData(info):

@@ -16,41 +16,69 @@ class Entry(object):
     
     def __init__(self, data):
         # general info
-        self.match = int(data[0])
-        self.team = int(data[1])
-        self.allianceColor = int(data[2])
-
-        # autonomous data
-        self.autoHadAuto = bool(data[3])
-        self.autoMobilityBonus = bool(data[4])
-        self.autoGoalieZone = bool(data[5])
-        self.autoHighScored = float(data[6])
-        self.autoLowScored = float(data[7])
-        self.autoHotScored = float(data[8])
+        index = 0
+        self.match = int(data[index])
+        index +=1
+        self.team = int(data[index])
+        index +=1
+        self.allianceColor = int(data[index])
+        index +=1
         
+        # autonomous data
+        self.autoHadAuto = bool(data[index])
+        index +=1
+        self.autoMobilityBonus = bool(data[index])
+        index +=1
+        self.autoGoalieZone = bool(data[index])
+        index +=1
+        self.autoHighScored = float(data[index])
+        index +=1
+        self.autoLowScored = float(data[index])
+        index +=1
+        self.autoHotScored = float(data[index])
+        index +=2
+
         # tele-op data
-        self.teleHighScored = float(data[9])
-        self.teleHighAttempted = float(data[10])
-        self.teleLowScored = float(data[11])
-        self.teleLowAttempted = float(data[12])
-        self.teleTrussScored = float(data[13])
-        self.teleCatchScored = float(data[14])
-        self.teleAssistScored = float(data[15])
+        self.teleAssistScored = 0
+        self.teleHighScored = 0
+        self.teleLowScored = 0
+        self.teleTrussScored = 0
+        self.teleCatchScored = 0
+        i = 0
+        self.teleNumCyc = int(data[index-1])
+        while i < self.teleNumCyc:
+            j = 0
+            while j < 9:
+                self.teleAssistScored += 1 if int(data[index])==1 else 0
+                index+=2
+                j+=1
+            self.teleHighScored += 1 if int(data[index])==2 else 0
+            self.teleLowScored += 1 if int(data[index])==0 else 0
+            index+=1
+            self.teleTrussScored += 1 if int(data[index])==0 else 0
+            self.teleCatchScored += 1 if int(data[index])==2 else 0
+            index+=1
+            i+=1
 
         # post data
-        self.postRegFouls = float(data[16])
-        self.postTechFouls = float(data[17])
-        self.postDisabled = bool(data[18])
-        self.postBroken = bool(data[19])
-        self.postYellowCard = bool(data[20])
-        self.postRedCard = bool(data[21])
-        self.postDefensive = bool(data[22])
+        self.postRegFouls = float(data[index])
+        index+=1
+        self.postTechFouls = float(data[index])
+        index+=1
+        self.postDisabled = bool(data[index])
+        index+=1
+        self.postBroken = bool(data[index])
+        index+=1
+        self.postYellowCard = bool(data[index])
+        index+=1
+        self.postRedCard = bool(data[index])
+        index+=1
+        self.postDefensive = bool(data[index])
 
         self.autoScored = self.autoHighScored + self.autoLowScored
         self.teleScored = self.teleHighScored + self.teleLowScored
         self.teleTCScored = self.teleTrussScored + self.teleCatchScored
         self.teleHadTele = True if self.teleScored>0 or self.teleTCScored>0 or self.teleAssistScored>0 else False
-        
         self.entries.append(self)
 
     def primary_sort(self):
@@ -82,7 +110,7 @@ class Entry(object):
         """Calculates defensive and assisstive score values."""
         # result = difference between offensive scores /
         #          the number of defensive players
-        self.defensiveScore = (allOff-oppOff) / allDef if self.defensive else 0
+        self.defensiveScore = (allOff-oppOff) / allDef / 3 if self.defensive else 0
         # assistive score this year is really easy: just take the points from assists
         self.assistiveScore = self.teleAssistScored*10
         
