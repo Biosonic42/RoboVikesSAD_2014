@@ -88,33 +88,21 @@ def calculate_data():
                 if entry.allianceColor == 0:
                     match.defScore0 += entry.defensiveScore
                     match.astScore0 += entry.assistiveScore
-                elif entry.allianceColor == 0:
+                elif entry.allianceColor == 1:
                     match.defScore1 += entry.defensiveScore
                     match.astScore1 += entry.assistiveScore
     # get match total scores
     for match in Match.matches:
         match.get_total()
 
-    # get match weighted scores
-    overall_score = 0
-    for match in Match.matches:
-        overall_score += match.overall
-
-    # weight = (s[m]/(s[w]-s[1])) * s[t]
+    # weight = (s[m]/(s[w]-s[1]))
     for entry in Entry.entries:
         for match in Match.matches:
             if match.number == entry.match:
-                tempweight = 0
-                if (match.total0-match.total1) != 0:
-                    entry.wScore = ((match.total0 + match.total1)*entry.totalScore)/100
-                    entry.woScore = ((match.total0 + match.total1)*entry.offensiveScore)/100
-                    entry.wdScore = ((match.total0 + match.total1)*entry.defensiveScore)/100
-                    entry.waScore = ((match.total0 + match.total1)*entry.assistiveScore)/100
-                else:
-                    entry.wScore = ((match.total0 + match.total1)*entry.totalScore)
-                    entry.woScore = ((match.total0 + match.total1)*entry.offensiveScore)
-                    entry.wdScore = ((match.total0 + match.total1)*entry.defensiveScore)
-                    entry.waScore = ((match.total0 + match.total1)*entry.assistiveScore)
+                entry.wScore = abs(entry.totalScore/(match.total0 - match.total1)) if match.total0 != match.total1 else entry.totalScore
+                entry.woScore = abs(entry.offensiveScore/(match.offScore0 - match.offScore1)) if match.offScore0 != match.offScore1 else entry.offensiveScore
+                entry.wdScore = abs(entry.defensiveScore/(match.defScore0 - match.defScore1)) if match.defScore0 != match.defScore1 else entry.defensiveScore
+                entry.waScore = abs(entry.assistiveScore/(match.astScore0 - match.defScore1)) if match.astScore0 != match.astScore1 else entry.assistiveScore
                     
     # get team average, weighted, total, and max/min scores
     for team in Team.team_list:
@@ -159,30 +147,38 @@ def assign_basic_team_values(team, entry):
     team.Info.autoHadAuto += int(entry.autoHadAuto)
     team.Info.autoMobilityBonus += int(entry.autoMobilityBonus)
     team.Info.autoGoalieZone += int(entry.autoGoalieZone)
-    team.Info.autoHighScored.append(entry.autoHighScored)
-    team.Info.autoLowScored.append(entry.autoLowScored)
-    team.Info.autoHotScored.append(entry.autoHotScored)
+    team.Info.autoHighScored.append(float(entry.autoHighScored))
+    team.Info.autoLowScored.append(float(entry.autoLowScored))
+    team.Info.autoHotScored.append(float(entry.autoHotScored))
     team.Info.autoScoredAuto += int(entry.scoredInAuto)
 
     team.Info.teleHadTele += int(entry.teleHadTele)
-    team.Info.teleNumCycles.append(float(entry.teleNumCyc))
-    team.Info.teleHighScored.append(entry.teleHighScored)
+    team.Info.teleHighScored.append(float(entry.teleHighScored))
     team.Info.teleScoredHigh += 1 if entry.teleHighScored>=1 else 0
-    team.Info.teleLowScored.append(entry.teleLowScored)
-    team.Info.teleTrussScored.append(entry.teleTrussScored)
-    team.Info.teleCatchScored.append(entry.teleCatchScored)
+    team.Info.teleLowScored.append(float(entry.teleLowScored))
+    team.Info.teleTrussScored.append(float(entry.teleTrussScored))
+    team.Info.teleScoredTruss += 1 if entry.teleTrussScored>=1 else 0
+    team.Info.teleCatchScored.append(float(entry.teleCatchScored))
     team.Info.teleCaught += 1 if entry.teleCatchScored>=1 else 0
-    team.Info.teleAssistScored.append(entry.teleAssistScored)
+    team.Info.teleAssistScored.append(float(entry.teleAssistScored))
     team.Info.teleScoredTele += int(entry.scoredInTele)
+    times = []
+    for time in entry.teleIntakeTimes: 
+        times.append(time)
+    avgTime = sum(times)/len(times) if len(times)>=1 else 0
+    team.Info.teleIntakeTimes.append(avgTime)
+    for hotSpot in entry.teleHotSpots:
+        team.Info.teleHotSpots.append(hotSpot)
 
     team.Info.postRegFouls.append(entry.postRegFouls)
     team.Info.postTechFouls.append(entry.postTechFouls)
     team.Info.postHadRegFoul += int(entry.hasRegFoul)
     team.Info.postHadTechFoul += int(entry.hasTechFoul)
     team.Info.postDisabled += int(entry.postDisabled)
-    team.Info.postBroken += int(entry.postBroken)
+    team.Info.postNoShow += int(entry.postNoShow)
     team.Info.postHadYellow += int(entry.postYellowCard)
     team.Info.postHadRed += int(entry.postRedCard)
+    team.Info.postAggressive += int(entry.postAggressive)
 
     team.Scores.oScores.append(entry.offensiveScore)
     team.Scores.autoScores.append(entry.autoScore)
@@ -508,9 +504,11 @@ def predict_outcome(teams=[]):
     if mur > mub:
         zval = (mur-mub)/math.sqrt((rst**2)+(bst**2)) if math.sqrt((rst**2)+(bst**2)) > 0 else 0
         perr = stats.lzprob(zval)
+        perr = round(perr,4)
         return "Red Alliance: " + str(100*perr)
     
     else:
         zval = (mub-mur)/math.sqrt((rst**2)+(bst**2)) if math.sqrt((rst**2)+(bst**2)) > 0 else 0
         perr = stats.lzprob(zval)
+        perr = round(perr, 4)
         return "Blue Alliance: " + str(100*perr)

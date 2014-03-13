@@ -65,8 +65,28 @@ class CompareController():
 
         return calculate.predict_outcome(teams)
 
-    def loadAlliance(self,name=None):
-        pass
+    def loadAlliance(self,alliance=None):
+        print alliance
+        teams = [0,0,0]
+        go = False
+        i=0
+        try:
+            newData = open("alliances.txt","r")
+            print "Alliance File Opened"
+        except:
+            pass
+            print "Error, could not open alliance file."
+        for line in newData:
+            if line == alliance + "\n":
+                go = True
+                print "FOUND"
+            elif go and i<3:
+                teams[i]=line.replace("\n","")
+                i+=1
+            if i >= 3:
+                go = False
+                break
+        return teams
 
     def saveAlliance(self,name="Custom Alliance",teams=[]):
         self.allianceOptions.append(name)

@@ -26,24 +26,27 @@ class _TeamInfo(object):
         self.autoScoredAuto = 0     # the number of matches for which the team scored in autonomous mode
 
         self.teleHadTele = 0        # the number of matches for which the robot scored in tele-op mode
-        self.teleNumCycles = []     # list holding the number of cycles for the robot each match
         self.teleHighScored = []    # list holding the number of scores in the high goal in tele-op (by match)
         self.teleScoredHigh = 0     # the number of matches for which the team scored in the high goal (search field)
         self.teleLowScored = []     # list holding the number of scores in the high goal in tele-op (by match)
         self.teleTrussScored = []   # list holding the number of successful truss scores in tele-op (by match)
+        self.teleScoredTruss = 0    # the number of matches for which the team scored in over the truss (search field)
         self.teleCatchScored = []   # list holding the number of successful catch scores in tele-op (by match)
         self.teleCaught = 0         # the number of matches for which the team caught a ball (search field)
         self.teleAssistScored = []  # list holding the number of successful assist scores in tele-op (by match)
         self.teleScoredTele = 0     # the number of matches for which the team scored (in a goal) in tele-op mode
+        self.teleHotSpots = []      # list holding the hots spots for this team (by match)
+        self.teleIntakeTimes = []   # list holding the average intake times for this team (by match)
         
         self.postRegFouls = []      # list holding the number of regular fouls for each match
         self.postTechFouls = []     # list holding the number of technical fouls for each match
         self.postHadRegFoul = 0     # the number of matches for which a team incurred a regular foul
         self.postHadTechFoul = 0    # the number of matches for which a team incurred a technical foul
         self.postDisabled = 0       # the number of matches in which a team was disabled
-        self.postBroken = 0         # the number of matches in which a team broke down
+        self.postNoShow = 0         # the number of matches in which a team didn't show up to the field
         self.postHadYellow = 0      # the number of matches for which a team incurred a yellow card
         self.postHadRed = 0         # the number of matches for which a team incurred a red card
+        self.postAggressive = 0     # the number of matches for which a team played aggressively
 
     def get_more_info(self):
         self.autoHotAccuracy = sum(self.autoHotScored)/(sum(self.autoHighScored)+sum(self.autoLowScored)) \
@@ -56,12 +59,12 @@ class _TeamInfo(object):
         self.avgAutoHighScored = sum(self.autoHighScored)/len(self.autoHighScored) if len(self.autoHighScored) else 0
         self.avgAutoLowScored = sum(self.autoLowScored)/len(self.autoLowScored) if len(self.autoLowScored) else 0
         self.avgAutoHotScored = sum(self.autoHotScored)/len(self.autoHotScored) if len(self.autoHotScored) else 0
-        self.avgTeleNumCycles = sum(self.teleNumCycles)/len(self.teleNumCycles)
         self.avgTeleHighScored = sum(self.teleHighScored)/len(self.teleHighScored) if len(self.teleHighScored) else 0
         self.avgTeleLowScored = sum(self.teleLowScored)/len(self.teleLowScored) if len(self.teleLowScored) else 0
         self.avgTeleTrussScored = sum(self.teleTrussScored)/len(self.teleTrussScored) if len(self.teleTrussScored) else 0
         self.avgTeleCatchScored = sum(self.teleCatchScored)/len(self.teleCatchScored) if len(self.teleCatchScored) else 0
         self.avgTeleAssistScored = sum(self.teleAssistScored)/len(self.teleAssistScored) if len(self.teleAssistScored) else 0
+        self.avgTeleIntakeTimes = sum(self.teleIntakeTimes)/len(self.teleIntakeTimes) if len(self.teleIntakeTimes) else 0
         self.avgPostRegFoul = sum(self.postRegFouls)/len(self.postRegFouls) if len(self.postRegFouls) else 0
         self.avgPostTechFoul = sum(self.postTechFouls)/len(self.postTechFouls) if len(self.postTechFouls) else 0
         
@@ -260,7 +263,7 @@ class Team(object):
         self.pHotAccuracy = str(100*round(self.Info.autoHotAccuracy,2)) + "%"
 
         self.avgTeleScore = round(self.Scores.avgTeleScore,2)
-        self.avgTeleNumCycles = round(self.Info.avgTeleNumCycles,2)
+        self.avgTeleIntakeTimes = round(self.Info.avgTeleIntakeTimes,2)
         self.avgTeleHighScored = round(self.Info.avgTeleHighScored,2)
         self.avgTeleLowScored = round(self.Info.avgTeleLowScored,2)  
         self.avgTeleTrussScored = round(self.Info.avgTeleTrussScored,2)
@@ -268,12 +271,13 @@ class Team(object):
         self.avgTeleAssistScored = round(self.Info.avgTeleAssistScored,2)
 
         self.pDisabled = str(int(100*self.Info.postDisabled)/len(matches)) + "%"
-        self.pBroken  = str(int(100*self.Info.postBroken)/len(matches)) + "%"
+        self.pNoShow  = str(int(100*self.Info.postNoShow)/len(matches)) + "%"
         self.avgPostRegFoul = round(self.Info.avgPostRegFoul,2)
         self.avgPostTechFoul = round(self.Info.avgPostTechFoul,2)
         self.avgFoulScore = round(self.Scores.avgFoulScore,2)
         self.pYellow = str(int(100*self.Info.postHadYellow)/len(matches)) + "%"
         self.pRed = str(int(100*self.Info.postHadRed)/len(matches)) + "%"
+        self.pAggressive = str(int(100*self.Info.postAggressive)/len(matches)) + "%"
 
     def getAttr(self, source):
         return getattr(self, source)

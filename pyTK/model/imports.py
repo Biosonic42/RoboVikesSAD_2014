@@ -35,7 +35,7 @@ def import_data(Filename=""):
             try:
                 newEntry = Entry(parse_data(line))
             except:
-                print "bad MatchData"
+                print "Match Data does not match format: skipping line..."
         print 
         print "Data Parsed"
 
@@ -74,11 +74,11 @@ def parse_data(info):
     data = []
     new = ""
     for character in info:
-        if character != "\n" and character !=",":
+        if character != "\n" and character !="," and character != "$":
             new += str(character)
         else:  
             try:
-                data.append(int(new))
+                data.append(float(new))
                 new=""
             except:
                 break

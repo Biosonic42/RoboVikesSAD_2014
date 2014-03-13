@@ -25,11 +25,11 @@ class TeamDataController():
                      ("pGoalieZone","Started in Goalie Zone: "),("avgAutoScore","Average Auto Score: "),
                      ("avgAutoHighScored","Average Auto Scored in High Goals: "),("avgAutoLowScored","Average Auto Scored in Low Goals: "),
                      ("avgAutoHotScored","Average Auto Scored in Hot Goals: "),("pHotAccuracy","Hot Goal Scoring Percentage: "),
-                     ("avgTeleScore","Average Tele Score: "),("avgTeleNumCycles","Average Number of Cycles: "),
+                     ("avgTeleScore","Average Tele Score: "),("avgTeleIntakeTimes","Average Intake Time: "),
                      ("avgTeleHighScored","Average Tele Scored in High Goals: "),("avgTeleLowScored","Average Tele Scored in Low Goals: "),
                      ("avgTeleTrussScored","Average Truss Scores: "),("avgTeleCatchScored","Average Catch Scores: "),
                      ("avgTeleAssistScored","Average Number of Assists Per Match: "),
-                     ("pDisabled","Disabled: "),("pBroken","Broken: "),
+                     ("pDisabled","Disabled: "),("pNoShow","No Show: "),
                      ("avgFoulScore","Average Foul Score: "),
                      ("avgPostRegFoul","Average Number of Regular Fouls: "),("avgPostTechFoul","Average Number of Technical Fouls: "),
                      ("pYellow","Received Yellow Card: "),("pRed","Received Red Card: ")]
@@ -52,7 +52,7 @@ class TeamDataController():
                  ("WeightedAst","Scores","waScores"),("WeightedTotal","Scores","wScores"),
                  ("avgAutoScore","Scores","autoScores"),("avgAutoHighScored","Info","autoHighScored"),
                  ("avgAutoLowScored","Info","autoLowScored"),("avgAutoHotScored","Info","autoHotScored"),
-                 ("avgTeleScore","Scores","teleScores"),("avgTeleNumCycles","Info","teleNumCycles"),
+                 ("avgTeleScore","Scores","teleScores"),("avgTeleIntakeTimes","Info","teleIntakeTimes"),
                  ("avgTeleHighScored","Info","teleHighScored"),("avgTeleLowScored","Info","teleLowScored"),
                  ("avgTeleTrussScored","Info","teleTrussScored"),
                  ("avgTeleCatchScored","Info","teleCatchScored"),("avgTeleAssistScored","Info","teleAssistScored"),
@@ -93,6 +93,17 @@ class TeamDataController():
             self.image = PhotoImage(file="Images/nopic.gif")
             return self.image
         
+        self.image = PhotoImage(file=image_name)
+        return self.image
+
+    def get_FieldDiagram(self):
+        image_name = "Images/field_diagram.gif"
+        try:
+            open(image_name)
+        except:
+            self.image = PhotoImage(file="Images/nopic.gif")
+            return self.image
+
         self.image = PhotoImage(file=image_name)
         return self.image
 

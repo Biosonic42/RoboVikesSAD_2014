@@ -25,59 +25,98 @@ class Entry(object):
         index +=1
         
         # autonomous data
-        self.autoHadAuto = bool(data[index])
+        self.autoHotScored = 0.0
+        
+        self.autoHadAuto = bool(int(data[index]))
         index +=1
-        self.autoMobilityBonus = bool(data[index])
+        self.autoMobilityBonus = bool(int(data[index]))
         index +=1
-        self.autoGoalieZone = bool(data[index])
+        self.autoGoalieZone = bool(int(data[index]))
         index +=1
+
         self.autoHighScored = float(data[index])
         index +=1
+        self.autoHotScored += float(data[index])
+        index += 1
+        self.autoHotScored += float(data[index])
+        index += 1
+        self.autoHotScored += float(data[index])
+        index += 1
+
         self.autoLowScored = float(data[index])
         index +=1
-        self.autoHotScored = float(data[index])
-        index +=2
+        self.autoHotScored += float(data[index])
+        index += 1
+        self.autoHotScored += float(data[index])
+        index += 1
+        self.autoHotScored += float(data[index])
+        index += 1
 
         # tele-op data
-        self.teleAssistScored = 0
+        self.teleIntakeTimes = []
+        self.teleHotSpots = []
+        self.teleAssistsGiven = 0
+        self.teleAssistsReceived = 0
         self.teleHighScored = 0
-        self.teleLowScored = 0
         self.teleTrussScored = 0
         self.teleCatchScored = 0
+
         i = 0
-        self.teleNumCyc = int(data[index-1])
-        while i < self.teleNumCyc:
-            j = 0
-            while j < 9:
-                self.teleAssistScored += 1 if int(data[index])==1 else 0
-                index+=2
-                j+=1
-            self.teleHighScored += 1 if int(data[index])==2 else 0
-            self.teleLowScored += 1 if int(data[index])==0 else 0
-            index+=1
-            self.teleTrussScored += 1 if int(data[index])==0 else 0
-            self.teleCatchScored += 1 if int(data[index])==2 else 0
-            index+=1
-            i+=1
+        numIntakes = data[index]
+        index += 1
+        while (i < numIntakes):
+            self.teleIntakeTimes.append(float(data[index]))
+            index += 1
+            i += 1
+
+        self.teleLowScored = float(data[index])
+        index += 1
+
+        i = 0
+        numHotSpots = data[index]
+        index += 1
+        while (i < numHotSpots):
+            hotSpot = [int(data[index]),float(data[index+1]),float(data[index+2])]
+            self.teleHotSpots.append(hotSpot)
+            index += 3
+            i += 1
 
         # post data
         self.postRegFouls = float(data[index])
-        index+=1
+        index += 1
         self.postTechFouls = float(data[index])
-        index+=1
-        self.postDisabled = bool(data[index])
-        index+=1
-        self.postBroken = bool(data[index])
-        index+=1
-        self.postYellowCard = bool(data[index])
-        index+=1
-        self.postRedCard = bool(data[index])
-        index+=1
-        self.postDefensive = bool(data[index])
+        index += 1
+
+        self.postDisabled = bool(int(data[index]))
+        index += 1
+        self.postNoShow = bool(int(data[index]))
+        index += 1
+
+        self.postYellowCard = bool(int(data[index]))
+        index += 1
+        self.postRedCard = bool(int(data[index]))
+        index += 1
+
+        self.postDefensive = bool(int(data[index]))
+        index += 1
+        self.postAggressive = bool(int(data[index]))
+
+        for h in self.teleHotSpots:
+            if h[0] == 1:
+                self.teleTrussScored += 1
+            elif h[0] == 2:
+                self.teleCatchScored += 1
+            elif h[0] == 3:
+                self.teleHighScored += 1
+            elif h[0] == 4:
+                self.teleAssistsGiven += 1
+            elif h[0] == 5:
+                self.teleAssistsReceived += 1
 
         self.autoScored = self.autoHighScored + self.autoLowScored
         self.teleScored = self.teleHighScored + self.teleLowScored
         self.teleTCScored = self.teleTrussScored + self.teleCatchScored
+        self.teleAssistScored = self.teleAssistsGiven + self.teleAssistsReceived
         self.teleHadTele = True if self.teleScored>0 or self.teleTCScored>0 or self.teleAssistScored>0 else False
         self.entries.append(self)
 
@@ -110,7 +149,7 @@ class Entry(object):
         """Calculates defensive and assisstive score values."""
         # result = difference between offensive scores /
         #          the number of defensive players
-        self.defensiveScore = (allOff-oppOff) / allDef / 3 if self.defensive else 0
+        self.defensiveScore = (allOff-oppOff) / allDef / 2.0 if self.defensive else 0
         # assistive score this year is really easy: just take the points from assists
         self.assistiveScore = self.teleAssistScored*10
         

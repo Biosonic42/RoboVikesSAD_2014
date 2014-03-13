@@ -26,7 +26,8 @@ class SearchController():
                     ("autoHadAuto","Had Autonomous"),("autoScoredAuto","Scored in Autonomous"),
                     ("autoGoalieZone","Started in Goalie Zone"),("autoMobilityBonus","Obtained Mobility Bonus"),
                     ("teleScoredTele","Scored in Tele"),("teleScoredHigh","Scored in High Goal (Tele-Op)"),
-                    ("teleCaught","Caught a Ball"),("postDisabled","Never Disabled"),("postBroken","Never Broken"),
+                    ("teleScoredTruss","Shot over the Truss"),("teleCaught","Caught a Ball"),
+                    ("postDisabled","Never Disabled"),("postNoShow","Always Showed Up"),
                     ("postHadRegFoul","No Regular Fouls"),("postHadTechFoul","No Technical Fouls"),
                     ("postHadYellow","No Yellow Cards"),("postHadRed","No Red Cards")]
                     
@@ -61,8 +62,9 @@ class SearchController():
                 "numOff":searchHas,"numDef":searchHas,"numAst":searchHas,
                 "autoHadAuto":searchHas,"autoScoredAuto":searchHas,
                 "autoGoalieZone":searchHas,"autoMobilityBonus":searchHas,
-                "teleScoredTele":searchHas,"teleScoredHigh":searchHas,"teleCaught":searchHas,
-                "postDisabled":searchNever,"postBroken":searchNever,
+                "teleScoredTele":searchHas,"teleScoredHigh":searchHas,
+                "teleScoredTruss":searchHas,"teleCaught":searchHas,
+                "postDisabled":searchNever,"postNoShow":searchNever,
                 "postHadRegFoul":searchNever,"postHadTechFoul":searchNever,
                 "postHadYellow":searchNever,"postHadRed":searchNever}
 

@@ -36,6 +36,6 @@ class Match(object):
         self.matches.append(self)
 
     def get_total(self):
-        self.total0 = self.offScore0
-        self.total1 = self.offScore1
+        self.total0 = self.offScore0 + self.defScore0 + self.astScore0
+        self.total1 = self.offScore1 + self.defScore1 + self.astScore1
         self.overall = self.total0 + self.total1

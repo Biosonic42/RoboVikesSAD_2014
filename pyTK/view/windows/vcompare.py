@@ -23,22 +23,34 @@ class Compare(Frame):
         for i in self.bVals:
             teams.append(i[0])
 
-        self.outcomeVar.set("Winner: " + self.controller.getComparison(teams))
+        self.outcomeVar.set("Winner - " + self.controller.getComparison(teams) + "%")
 
     def clear_compare(self):
         self.outcomeVar.set("N/A")
     
     def load_alliance(self, event=None, teams=None, ally=None):
+        loadedTeams = self.controller.loadAlliance(alliance=teams)
+        
         setState = NORMAL if teams == "Custom" else "readonly"
         if ally == self.rVals:
+            i = 0
             for entry in self.rTeamEntries:
                 entry.config(state=setState)
+                self.rVals[i][0].set(loadedTeams[i])
+                self.load_team(teamVals=self.rVals,index=i)
+                i+=1
         elif ally == self.bVals:
+            i = 0
             for entry in self.bTeamEntries:
                 entry.config(state=setState)
+                self.bVals[i][0].set(loadedTeams[i])
+                self.load_team(teamVals=self.bVals,index=i)
+                i+=1
 
         # eventually will load pre-saved alliances, including the 8 seeded alliances
-
+        
+                
+        
     def load_team(self, event=None, teamVals=None, index=None):
         team = teamVals[index][0].get()
         if team not in self.controller.available and team != "0":
@@ -234,6 +246,8 @@ class Compare(Frame):
         self.predictLabel.pack(side=LEFT,padx=5,pady=5)
         self.predictButton = Button(self.predictFrame, text="Predict Match Outcome", font=("Times","18"),
                                     command=self.compare_alliances)
+        self.predictButton.bind("<Return>",
+                                lambda event:self.compare_alliances())
         self.clearButton = Button(self.predictFrame, text="Clear Prediction", font=("Times","18"),
                                   command=self.clear_compare)
         self.clearButton.pack(side=RIGHT,padx=5,pady=5)
