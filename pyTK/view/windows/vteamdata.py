@@ -108,16 +108,16 @@ class TeamData(Frame):
                     fillColor = "green"
                     label = "G"
                 elif(color==4):
-                    fillColor = "purple"
+                    fillColor = "pink"
                     label = "GA"
                 elif(color==5):
-                    fillColor = "pink"
+                    fillColor = "purple"
                     label = "RA"
                 else:
                     fillColor= "black"
                     
                 self.hotSpots.create_oval(x-r,y-r,x+r,y+r,fill=fillColor)
-                self.hotSpots.create_text(x-r-10,y-r-10,anchor=NW,text=label)
+                self.hotSpots.create_text(x-r-10,y-r-10,anchor=NW,text=label,fill=fillColor)
                        
             self.shown = True
 

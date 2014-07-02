@@ -31,9 +31,12 @@ def import_data(Filename=""):
     try:
         print
         for line in newData:
-            if line == "end": break
+            if line == "end":
+                print "END OF FILE"
+                break
             try:
                 newEntry = Entry(parse_data(line))
+                print "New Entry Parsed"
             except:
                 print "Match Data does not match format: skipping line..."
         print 
